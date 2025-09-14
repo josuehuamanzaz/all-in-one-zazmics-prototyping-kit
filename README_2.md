@@ -1,9 +1,9 @@
 ```sh
-docker compose --file docker-compose.yml --file docker-compose.extend.yml --profile gpu-nvidia build
+docker compose --profile gpu-nvidia build
 ```
 
 ```sh
-docker compose --file docker-compose.yml --file docker-compose.extend.yml --profile gpu-nvidia up
+docker compose --profile gpu-nvidia up
 ```
 
 add the `nomic-embed-text` model to create embedding
@@ -23,7 +23,7 @@ curl http://ollama:11434/api/embeddings \
 ```
 
 ```sh
-docker exec -it generate-workflow sh -c "cd /workspace/borra && python temp.py"
+docker exec -it extract-workflow sh -c "cd /workspace/borra && python temp.py"
 ```
 
 ```sh
