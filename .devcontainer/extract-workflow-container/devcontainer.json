@@ -1,0 +1,7 @@
+{
+  "name": "Extract Workflow Container",
+  "dockerComposeFile": ["../../docker-compose.yml"],
+  "service": "extract-workflow",
+  "shutdownAction": "none",
+  "workspaceFolder": "/workspace/extract-workflow"
+}
