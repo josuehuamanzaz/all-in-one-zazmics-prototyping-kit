@@ -8,12 +8,6 @@ docker compose --profile gpu-nvidia build
 docker compose --profile gpu-nvidia up
 ```
 
-add the `nomic-embed-text` model to create embedding
-
-```sh
-docker exec -it ollama ollama pull nomic-embed-text
-```
-
 ```sh
 curl http://ollama:11434/api/embeddings \
   -H "Content-Type: application/json" \
@@ -24,12 +18,20 @@ curl http://ollama:11434/api/embeddings \
 
 ```
 
-go to `localhost:5801` and search for your workflow. Save it. Then you use your git tool to have control over the changes you have made.
+(optional) use a template to start working
 
-<img src="image.png" alt="alt text" width="600"/>
+<img src="README images/image-1.png" alt="alt text" width="600"/>
+
+when you are done working, save your project
+
+<img src="README images/image-2.png" alt="alt text" width="600"/>
+
+Just saving the workflow is ok, but it will only live on your comptuer. To push the workflow to github, go to `localhost:5801` and search for your workflow. Save it. Then you use your git tool to have control over the changes you have made.
+
+<img src="README images/image.png" alt="alt text" width="600"/>
 
 delete everything once you are done
 
 ```sh
-docker compose down -v
+docker compose down
 ```
