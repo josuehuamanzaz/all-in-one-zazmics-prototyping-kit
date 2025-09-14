@@ -1,3 +1,5 @@
+start the project with compose
+
 ```sh
 docker compose --profile gpu-nvidia build
 ```
@@ -22,9 +24,11 @@ curl http://ollama:11434/api/embeddings \
 
 ```
 
-```sh
-docker exec -it extract-workflow sh -c "cd /workspace/borra && python temp.py"
-```
+go to `localhost:5801` and search for your workflow. Save it. Then you use your git tool to have control over the changes you have made.
+
+<img src="image.png" alt="alt text" width="600"/>
+
+delete everything once you are done
 
 ```sh
 docker compose down -v

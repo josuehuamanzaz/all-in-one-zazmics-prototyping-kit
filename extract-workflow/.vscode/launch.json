@@ -3,9 +3,9 @@
   "configurations": [
     {
       "name": "Launch Streamlit App",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
-      "program": "${workspaceFolder}/.venv/bin/streamlit", // 👈 Linux/macOS con entorno virtual
+      "program": "/usr/local/bin/streamlit", // 👈 Linux/macOS con entorno virtual
       "args": [
         "run",
         "app.py"
