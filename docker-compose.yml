@@ -1,5 +1,7 @@
 
-
+volumes:
+  pgadmin_storage:
+  
 networks:
   demo:
 
@@ -135,3 +137,26 @@ services:
     image: ollama/ollama:rocm
     depends_on:
      - ollama-gpu-amd
+
+  pgadmin4:
+    image: dpage/pgadmin4
+    networks: ['demo']
+    # restart: always
+    ports:
+      - 80:80
+    container_name: pgadmin4_container
+    volumes:
+      # https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
+      - pgadmin_storage:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+
+  extract-workflow:
+    build: ./extract-workflow
+    container_name: extract-workflow
+    networks: ['demo']
+    command: ["sleep", "infinity"]
+    env_file: .env
+    volumes:
+      - .:/workspace
