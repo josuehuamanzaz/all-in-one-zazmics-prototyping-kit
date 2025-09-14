@@ -1,8 +1,4 @@
-volumes:
-  n8n_storage:
-  postgres_storage:
-  ollama_storage:
-  qdrant_storage:
+
 
 networks:
   demo:
@@ -31,15 +27,11 @@ x-ollama: &service-ollama
   restart: unless-stopped
   ports:
     - 11434:11434
-  volumes:
-    - ollama_storage:/root/.ollama
 
 x-init-ollama: &init-ollama
   image: ollama/ollama:latest
   networks: ['demo']
   container_name: ollama-pull-llama
-  volumes:
-    - ollama_storage:/root/.ollama
   entrypoint: /bin/sh
   environment:
     - OLLAMA_HOST=ollama:11434
@@ -57,8 +49,6 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
-    volumes:
-      - postgres_storage:/var/lib/postgresql/data
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -h localhost -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
       interval: 5s
@@ -87,7 +77,6 @@ services:
     ports:
       - 5678:5678
     volumes:
-      - n8n_storage:/home/node/.n8n
       - ./n8n/demo-data:/demo-data
       - ./shared:/data/shared
     depends_on:
@@ -104,8 +93,6 @@ services:
     restart: unless-stopped
     ports:
       - 6333:6333
-    volumes:
-      - qdrant_storage:/qdrant/storage
 
   ollama-cpu:
     profiles: ["cpu"]
