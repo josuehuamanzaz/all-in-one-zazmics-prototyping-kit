@@ -70,16 +70,12 @@ if selected_name:
 
         if json_data:
 
-            # Crear carpeta de exportación si no existe
-            export_dir = "exported"
-            os.makedirs(export_dir, exist_ok=True)
-
-            filename = f"{export_dir}/{selected_id}.json"
+            filename = f"/workspace/n8n/demo-data/workflows/{selected_id}.json"
 
             # Guardar archivo en el sistema de archivos
             with open(filename, "w", encoding="utf-8") as f:
                 json.dump(json_data, f, indent=2, ensure_ascii=False)
 
-            st.success(f"📁 Archivo guardado en: `{filename}`")
+            st.success(f"📁 File saved at: `{filename}`")
         else:
-            st.error("No se encontró el registro.")
+            st.error("No register found.")
