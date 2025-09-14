@@ -1,0 +1,27 @@
+volumes:
+  pgadmin_storage:
+
+
+services:
+  pgadmin4:
+    image: dpage/pgadmin4
+    networks: ['demo']
+    # restart: always
+    ports:
+      - 80:80
+    container_name: pgadmin4_container
+    volumes:
+      # https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
+      - pgadmin_storage:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+
+  generate-workflow:
+    build: ./borra
+    container_name: generate-workflow
+    networks: ['demo']
+    command: ["sleep", "infinity"]
+    env_file: .env
+    volumes:
+      - .:/workspace
