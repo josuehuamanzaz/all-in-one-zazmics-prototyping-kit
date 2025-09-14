@@ -3,7 +3,6 @@ import psycopg2
 import json
 import os
 from dotenv import load_dotenv
-from io import BytesIO
 
 # Cargar variables del entorno (.env)
 load_dotenv()
@@ -14,7 +13,7 @@ DB_NAME = os.getenv("POSTGRES_DB")
 DB_HOST = os.getenv("POSTGRES_HOST", "postgres")
 DB_PORT = os.getenv("POSTGRES_PORT", "5432")
 
-# Conexión única (puedes manejarla con cache si quieres)
+# Conexión única
 conn = psycopg2.connect(
     dbname=DB_NAME,
     user=DB_USER,
@@ -28,33 +27,15 @@ conn = psycopg2.connect(
 # ------------------------
 def row_to_custom_json(table, row_id, id_column="id"):
     with conn.cursor() as cur:
-        cur.execute(f"SELECT * FROM {table} WHERE {id_column} = %s", (row_id,))
-        row = cur.fetchone()
-        if not row:
-            return None
+        cur.execute(f"""
+            SELECT row_to_json(t)
+            FROM (
+                SELECT * FROM {table} WHERE {id_column} = %s
+            ) t
+        """, (row_id,))        
 
-        colnames = [desc[0] for desc in cur.description]
-        result = {}
-
-        for col, val in zip(colnames, row):
-            if val is None:
-                result[col] = None
-            elif isinstance(val, bool):
-                result[col] = val
-            elif isinstance(val, (int, float)):
-                result[col] = val
-            elif isinstance(val, dict):
-                result[col] = val
-            elif isinstance(val, str):
-                try:
-                    parsed = json.loads(val)
-                    result[col] = parsed
-                except Exception:
-                    result[col] = val
-            else:
-                result[col] = str(val)
-
-        return result
+        result = cur.fetchone()
+        return result[0] if result else None
 
 # ------------------------
 # Función para obtener lista de entidades
@@ -84,27 +65,21 @@ selected_name = st.selectbox("Selecciona un workflow:", list(name_to_id.keys()))
 if selected_name:
     selected_id = name_to_id[selected_name]
 
-    if st.button("Convertir y Descargar JSON"):
+    if st.button("Convertir y Guardar JSON"):
         json_data = row_to_custom_json("workflow_entity", selected_id)
 
         if json_data:
-            # Mostrar en Streamlit
-            st.success("✅ JSON generado correctamente")
-            st.json(json_data)
 
-            # Guardar en BytesIO para descarga
-            json_bytes = BytesIO()
-            json.dump(json_data, json_bytes, indent=2, ensure_ascii=False)
-            json_bytes.seek(0)
+            # Crear carpeta de exportación si no existe
+            export_dir = "exported"
+            os.makedirs(export_dir, exist_ok=True)
 
-            filename = f"{selected_id}.json"
+            filename = f"{export_dir}/{selected_id}.json"
 
-            # Botón para descargar
-            st.download_button(
-                label="📥 Descargar JSON",
-                data=json_bytes,
-                file_name=filename,
-                mime="application/json"
-            )
+            # Guardar archivo en el sistema de archivos
+            with open(filename, "w", encoding="utf-8") as f:
+                json.dump(json_data, f, indent=2, ensure_ascii=False)
+
+            st.success(f"📁 Archivo guardado en: `{filename}`")
         else:
             st.error("No se encontró el registro.")
