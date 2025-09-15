@@ -40,7 +40,13 @@
         272
       ],
       "typeVersion": 1,
-      "webhookId": "fb567c2e-aefa-4329-bcc7-fac572509719"
+      "webhookId": "fb567c2e-aefa-4329-bcc7-fac572509719",
+      "credentials": {
+        "githubApi": {
+          "id": "3zftLYEhrSo2r8pG",
+          "name": "GitHub account"
+        }
+      }
     },
     {
       "parameters": {
@@ -52,20 +58,6 @@
       "position": [
         1056,
         272
-      ],
-      "typeVersion": 1
-    },
-    {
-      "parameters": {
-        "model": "text-embedding-3-small",
-        "options": {}
-      },
-      "id": "7704f993-b1c9-477a-8b5a-77dc2cb68161",
-      "name": "Embeddings OpenAI",
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
-      "position": [
-        1248,
-        464
       ],
       "typeVersion": 1
     },
@@ -96,7 +88,7 @@
       "name": "Default Data Loader",
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "position": [
-        1392,
+        1600,
         480
       ],
       "typeVersion": 1
@@ -107,7 +99,7 @@
       "name": "Token Splitter",
       "type": "@n8n/n8n-nodes-langchain.textSplitterTokenSplitter",
       "position": [
-        1392,
+        1600,
         672
       ],
       "typeVersion": 1
@@ -126,10 +118,16 @@
       "name": "Qdrant Vector Store",
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "position": [
-        1296,
+        1504,
         272
       ],
-      "typeVersion": 1
+      "typeVersion": 1,
+      "credentials": {
+        "qdrantApi": {
+          "id": "sFfERYppMeBnFNeA",
+          "name": "Local QdrantApi database"
+        }
+      }
     },
     {
       "parameters": {
@@ -144,41 +142,6 @@
       ],
       "webhookId": "71bfe0f8-227e-466b-9d07-69fd9fe4a27b",
       "typeVersion": 1.1
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "id": "ead23ef6-2b6b-428d-b412-b3394bff8248",
-      "name": "OpenAI Chat Model",
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "position": [
-        736,
-        864
-      ],
-      "typeVersion": 1
-    },
-    {
-      "parameters": {
-        "name": "movie_recommender",
-        "description": "Call this tool to get a list of recommended movies from a vector database. ",
-        "workflowId": {
-          "__rl": true,
-          "mode": "id",
-          "value": "a58HZKwcOy7lmz56"
-        },
-        "specifyInputSchema": true,
-        "schemaType": "manual",
-        "inputSchema": "{\n\"type\": \"object\",\n\"properties\": {\n\t\"positive_example\": {\n      \"type\": \"string\",\n      \"description\": \"A string with a movie description matching the user's positive recommendation request\"\n    },\n    \"negative_example\": {\n      \"type\": \"string\",\n      \"description\": \"A string with a movie description matching the user's negative anti-recommendation reuqest\"\n    }\n}\n}"
-      },
-      "id": "7ab936e1-aac8-43bc-a497-f2d02c2c19e5",
-      "name": "Call n8n Workflow Tool",
-      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
-      "position": [
-        1008,
-        864
-      ],
-      "typeVersion": 1.2
     },
     {
       "parameters": {},
@@ -293,28 +256,17 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.openai.com/v1/embeddings",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "openAiApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "Bearer $OPENAI_API_KEY"
-            }
-          ]
-        },
+        "url": "http://ollama:11434/api/embeddings",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
             {
-              "name": "input",
-              "value": "={{ $json.query.positive_example }}"
+              "name": "model",
+              "value": "nomic-embed-text"
             },
             {
-              "name": "model",
-              "value": "text-embedding-3-small"
+              "name": "prompt",
+              "value": "Texto de ejemplo para embedding"
             }
           ]
         },
@@ -332,7 +284,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.openai.com/v1/embeddings",
+        "url": "http://ollama:11434/api/embeddings",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "openAiApi",
         "sendHeaders": true,
@@ -520,6 +472,92 @@
         240
       ],
       "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## reference\n\nhttps://n8n.io/workflows/2440-building-rag-chatbot-for-movie-recommendations-with-qdrant-and-open-ai/"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2080,
+        544
+      ],
+      "typeVersion": 1,
+      "id": "8cbd0f23-4476-4766-900b-4ae580ee6349",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "model": "nomic-embed-text:latest"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        480
+      ],
+      "id": "1bf24513-52d9-4299-8e14-82ffcad10776",
+      "name": "Embeddings Ollama",
+      "credentials": {
+        "ollamaApi": {
+          "id": "xHuYe0MDGOs9IpBW",
+          "name": "Local Ollama service"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        688,
+        864
+      ],
+      "id": "3bc77078-fbe6-40be-93a3-be291545611e",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "xHuYe0MDGOs9IpBW",
+          "name": "Local Ollama service"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "maxItems": 100
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1264,
+        272
+      ],
+      "id": "54da4a33-8c85-4b0a-9f59-7ede0e1572c8",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "name": "movie_recommender",
+        "description": "Call this tool to get a list of recommended movies from a vector database. ",
+        "workflowId": {
+          "__rl": true,
+          "value": "gHQMdQMbbwmoxzUF",
+          "mode": "id"
+        },
+        "specifyInputSchema": true,
+        "schemaType": "manual",
+        "inputSchema": "{\n\"type\": \"object\",\n\"properties\": {\n\t\"positive_example\": {\n      \"type\": \"string\",\n      \"description\": \"A string with a movie description matching the user's positive recommendation request\"\n    },\n    \"negative_example\": {\n      \"type\": \"string\",\n      \"description\": \"A string with a movie description matching the user's negative anti-recommendation reuqest\"\n    }\n}\n}"
+      },
+      "id": "7ab936e1-aac8-43bc-a497-f2d02c2c19e5",
+      "name": "Call 'Building RAG Chatbot for Movie Recommendations with Qdrant and Open AI'",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        1008,
+        864
+      ],
+      "typeVersion": 1.2
     }
   ],
   "connections": {
@@ -589,34 +627,12 @@
         ]
       ]
     },
-    "Embeddings OpenAI": {
-      "ai_embedding": [
-        [
-          {
-            "node": "Qdrant Vector Store",
-            "type": "ai_embedding",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Extract from File": {
       "main": [
         [
           {
-            "node": "Qdrant Vector Store",
+            "node": "Limit",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -662,17 +678,6 @@
             "node": "Merge",
             "type": "main",
             "index": 1
-          }
-        ]
-      ]
-    },
-    "Call n8n Workflow Tool": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
           }
         ]
       ]
@@ -774,20 +779,65 @@
           }
         ]
       ]
+    },
+    "Embeddings Ollama": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Building RAG Chatbot for Movie Recommendations with Qdrant and Open AI'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-09-14T06:18:33.197+00:00",
-  "updatedAt": "2025-09-14T06:18:33.197+00:00",
+  "updatedAt": "2025-09-14T17:32:05.627+00:00",
   "settings": {
     "executionOrder": "v1"
   },
   "staticData": null,
   "pinData": {},
-  "versionId": "3034384d-31ab-4f67-957e-3b8ff4d0498e",
+  "versionId": "536455c4-f7d0-4b60-ad90-e49cec4aabe5",
   "triggerCount": 0,
   "id": "gHQMdQMbbwmoxzUF",
   "meta": {
-    "templateId": "2440"
+    "templateId": "2440",
+    "templateCredsSetupCompleted": true
   },
   "parentFolderId": null,
   "isArchived": false

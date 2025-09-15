@@ -1,0 +1,13 @@
+id,titulo,seccion,contenido
+1,NubeDrive - Descripción general,General,"NubeDrive es una plataforma de almacenamiento en la nube que permite guardar, sincronizar y compartir archivos de forma segura desde cualquier dispositivo."
+2,Espacio gratuito,Planes,"Cada usuario recibe 15 GB de almacenamiento gratuito al registrarse."
+3,Plan Pro 100,Planes,"Incluye 100 GB de almacenamiento por $2.99 al mes."
+4,Plan Pro 1TB,Planes,"Incluye 1 TB de almacenamiento por $9.99 al mes."
+5,Sincronización,Funciones,"Los archivos se sincronizan automáticamente entre todos los dispositivos vinculados."
+6,Versionado de archivos,Funciones,"Permite recuperar versiones anteriores de archivos por hasta 30 días."
+7,Colaboración,Funciones,"Los usuarios pueden compartir carpetas y archivos con permisos de solo lectura o edición."
+8,Restaurar archivo,FAQ,"Para restaurar una versión anterior, haz clic derecho sobre el archivo > 'Ver historial de versiones' > 'Restaurar'."
+9,Límite de espacio,FAQ,"Si superas el límite gratuito, no podrás subir archivos nuevos hasta liberar espacio o actualizar tu plan."
+10,Métodos de pago,FAQ,"Se aceptan tarjetas de crédito, débito y PayPal. El pago se renueva automáticamente a menos que se cancele."
+11,Soporte técnico,Contacto,"Puedes contactar al soporte por email (soporte@nubedrive.com) o al +1 (800) 555-1234, de lunes a viernes, 9:00 a 18:00 (UTC-5)."
+12,Última actualización,Metadata,"09/09/2025"
