@@ -9,7 +9,7 @@ docker compose --profile gpu-nvidia up
 ```
 
 ```sh
-curl http://ollama:11434/api/embeddings \
+curl http://localhost:11434/api/embeddings \
   -H "Content-Type: application/json" \
   -d '{
     "model": "nomic-embed-text",
@@ -33,5 +33,5 @@ Just saving the workflow is ok, but it will only live on your comptuer. To push 
 delete everything once you are done
 
 ```sh
-docker compose down
+docker compose --profile gpu-nvidia down
 ```
