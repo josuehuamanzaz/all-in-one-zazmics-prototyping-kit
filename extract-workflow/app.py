@@ -4,7 +4,7 @@ import json
 import os
 from dotenv import load_dotenv
 
-# Cargar variables del entorno (.env)
+# Load environment variables from .env file
 load_dotenv()
 
 DB_USER = os.getenv("POSTGRES_USER")
@@ -13,7 +13,7 @@ DB_NAME = os.getenv("POSTGRES_DB")
 DB_HOST = os.getenv("POSTGRES_HOST", "postgres")
 DB_PORT = os.getenv("POSTGRES_PORT", "5432")
 
-# Conexión única
+# Single connection
 conn = psycopg2.connect(
     dbname=DB_NAME,
     user=DB_USER,
@@ -23,7 +23,7 @@ conn = psycopg2.connect(
 )
 
 # ------------------------
-# Función que convierte una fila a JSON
+# Function that converts a row to JSON
 # ------------------------
 def row_to_custom_json(table, row_id, id_column="id"):
     with conn.cursor() as cur:
@@ -38,7 +38,7 @@ def row_to_custom_json(table, row_id, id_column="id"):
         return result[0] if result else None
 
 # ------------------------
-# Función para obtener lista de entidades
+# Function to get list of entities
 # ------------------------
 def get_workflow_entities():
     with conn.cursor() as cur:
@@ -46,19 +46,32 @@ def get_workflow_entities():
         rows = cur.fetchall()
         return rows
 
+
+def save_all_credentials():
+    with conn.cursor() as cur:
+        cur.execute("SELECT id FROM credentials_entity")
+        rows = cur.fetchall()
+        for (cred_id,) in rows:
+            json_data = row_to_custom_json("credentials_entity", cred_id)
+            if json_data:
+                filename = f"/workspace/n8n/demo-data/credentials/{cred_id}.json"
+                with open(filename, "w", encoding="utf-8") as f:
+                    json.dump(json_data, f, indent=2, ensure_ascii=False)
+                st.write(f"Saved credential: {filename}")
+
 # ------------------------
 # STREAMLIT APP
 # ------------------------
-st.title("Exportador de Workflow Entity a JSON")
+st.title("Generate n8n Workflow JSON from PostgreSQL")
 
-# Obtener entidades
+# Obtain entities
 entities = get_workflow_entities()
 
 if not entities:
-    st.warning("No se encontraron entidades.")
+    st.warning("No entities found.")
     st.stop()
 
-# Crear diccionario para selección
+# Map names to IDs
 name_to_id = {name: entity_id for entity_id, name in entities}
 selected_name = st.selectbox("Selecciona un workflow:", list(name_to_id.keys()))
 
@@ -68,11 +81,13 @@ if selected_name:
     if st.button("Convertir y Guardar JSON"):
         json_data = row_to_custom_json("workflow_entity", selected_id)
 
+        save_all_credentials()
+
         if json_data:
 
             filename = f"/workspace/n8n/demo-data/workflows/{selected_id}.json"
 
-            # Guardar archivo en el sistema de archivos
+            # save file to filesystem
             with open(filename, "w", encoding="utf-8") as f:
                 json.dump(json_data, f, indent=2, ensure_ascii=False)
 

@@ -6,6 +6,4 @@ RUN pip install python-dotenv
 
 RUN pip install streamlit
 
-WORKDIR /workspace/extract-workflow
-
-CMD ["streamlit", "run", "temp.py"]
+CMD ["streamlit", "run", "/workspace/extract-workflow/app.py"]

@@ -156,7 +156,6 @@ services:
     build: ./extract-workflow
     container_name: extract-workflow
     networks: ['demo']
-    command: ["sleep", "infinity"]
     env_file: .env
     volumes:
       - .:/workspace
